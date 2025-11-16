@@ -36,14 +36,3 @@
 - Files share the same AES key as the message but are encrypted with a dedicated nonce to preserve AES-GCM security guarantees.
 - Metadata (name + MIME) stays in plaintext for discoverability; content remains encrypted.
 
-## Security Considerations
-- **Private keys**: never stored unencrypted. They are wrapped using PBKDF2 (SHA-256, 390k iterations) + AES-GCM. Clients must retain the user password to decrypt.
-- **Transport**: run Django behind HTTPS to protect credentials and tokens in transit.
-- **Token scope**: tokens are bearer-style; rotate frequently or store short expiration if moving to production.
-- **Attachments**: ensure clients enforce size limits before sending to avoid storage abuse.
-- **Admin**: Django admin exposes crypto metadata; restrict access carefully in production deployments.
-
-## Extensibility Ideas
-- Replace header tokens with JWT or OAuth/OpenID Connect.
-- Replace polling with WebSockets (Django Channels) for instant delivery.
-- Add message read receipts, deletion policies, or forward secrecy through per-session RSA keys.
